@@ -34,18 +34,10 @@ export default class {
 
   public async checkRule() {
     const rules = await getRules(this.bearerToken);
-    console.log(rules);
-    /*if (!rules.data?.some((d) => d.value === this.value())) {
-      const aRules = await changeRules(this.bearerToken, {
-        delete: [{  value: this.value(), tag: this.tag }],
-      });
-      //console.log(rules);
-    }*/
     if (!rules.data?.some((d) => d.value === this.value())) {
       const aRules = await changeRules(this.bearerToken, {
         add: [{ value: this.value(), tag: this.tag }],
       });
-      //console.log(rules);
     }
   }
 
