@@ -3,14 +3,12 @@ import { config } from "https://deno.land/x/dotenv/mod.ts";
 import { pathResolver } from "https://kamekyame.github.io/deno_tools/path/mod.ts";
 const resolve = pathResolver(import.meta);
 
-//import { getBearerToken } from "https://kamekyame.github.io/twitter_api_client/auth/oauth2.ts";
-import { getBearerToken } from "../twitter_api_client/auth/oauth2.ts";
+import { getBearerToken } from "https://kamekyame.github.io/twitter_api_client/auth/oauth2.ts";
 import {
   connectStream,
-} from "../twitter_api_client/api_v2/tweets/filtered_stream.ts";
-//} from "https://kamekyame.github.io/twitter_api_client/api_v2/tweets/filtered_stream.ts";
+} from "https://kamekyame.github.io/twitter_api_client/api_v2/tweets/filtered_stream.ts";
 
-import Collect from "./mod.ts";
+import Collect, { option } from "./mod.ts";
 
 const env = config({
   path: resolve("./.env"),
@@ -34,13 +32,17 @@ const collect = new Collect(auth, bearerToken);
 collect.setReceiveUsername(receiveUsername);
 await collect.checkRule();
 
-connectStream(bearerToken, (res) => {
-  collect.callback(res);
-}, {
-  expansions: {
-    author_id: true,
+connectStream(
+  bearerToken,
+  (res) => {
+    collect.callback(res);
   },
-  "user.fields": {
-    username: true,
-  },
-});
+  Object.assign({
+    expansions: {
+      author_id: true,
+    },
+    "user.fields": {
+      username: true,
+    },
+  }, option),
+);

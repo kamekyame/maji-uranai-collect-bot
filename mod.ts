@@ -1,3 +1,3 @@
-import Collect from "./collect.ts";
-
-export default Collect;
+import CollectDefault from "./collect.ts";
+export default CollectDefault;
+export * from "./collect.ts";
