@@ -23,7 +23,7 @@ export default class {
   private receiveUsername = "Hals_SC";
 
   private readonly tag = "maji-uranai-collectBOT";
-  private readonly value = () => `from:${this.receiveUsername} "【定期】"⭐まぁじ占い⭐"`;
+  private readonly value = () => `from:${this.receiveUsername} "【定期】⭐まぁじ占い⭐"`;
 
   constructor(auth: OAuth1Info, bearerToken: string) {
     this.auth = auth;
@@ -72,7 +72,9 @@ export default class {
 
       zodiacSignsFile.add({ value, badValue, date });
 
-      bodyText = `今日一番運勢が悪いのは…${badValue}`;
+      bodyText = `
+    今日一番運勢が悪いのは…
+    ごめんなさい。${badValue}の方です(笑)`;
     }
 
     const getUser = () => {
@@ -86,7 +88,6 @@ export default class {
     let status = `
 @${user.username}
 ${bodyText}
-
 #すずともBot
 `;
 
