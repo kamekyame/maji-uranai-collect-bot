@@ -1,8 +1,6 @@
 import { OAuth1Info } from "https://kamekyame.github.io/deno_tools/http/mod.ts";
 
 import {
-  changeRules,
-  getRules,
   StreamParam,
   StreamTweet,
 } from "https://kamekyame.github.io/twitter_api_client/api_v2/tweets/filtered_stream.ts";
@@ -18,29 +16,27 @@ import { colors, zodiacSigns } from "./data.ts";
 
 export default class {
   private readonly auth: OAuth1Info;
-  private readonly bearerToken: string;
+  //private readonly bearerToken: string;
 
   private receiveUsername = "Hals_SC";
 
   private readonly tag = "maji-uranai-collectBOT";
   private readonly value = () => `from:${this.receiveUsername} "【定期】⭐まぁじ占い⭐"`;
 
-  constructor(auth: OAuth1Info, bearerToken: string) {
+  public readonly option: StreamParam = {
+    "tweet.fields": { created_at: true },
+  };
+
+  constructor(auth: OAuth1Info) {
     this.auth = auth;
-    this.bearerToken = bearerToken;
   }
 
   public setReceiveUsername(username: string) {
     this.receiveUsername = username;
   }
 
-  public async checkRule() {
-    const rules = await getRules(this.bearerToken);
-    if (!rules.data?.some((d) => d.value === this.value())) {
-      const aRules = await changeRules(this.bearerToken, {
-        add: [{ value: this.value(), tag: this.tag }],
-      });
-    }
+  public getRule() {
+    return { tag: this.tag, value: this.value() };
   }
 
   async callback(res: StreamTweet) {
@@ -101,9 +97,3 @@ ${bodyText}
     TweetLogFileOp.add(tweetRes);
   }
 }
-
-const option: StreamParam = {
-  "tweet.fields": { created_at: true },
-};
-
-export { option };
